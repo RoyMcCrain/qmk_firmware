@@ -146,10 +146,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_LOWER);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         if (lower_pressed && (TIMER_DIFF_16(record->event.time, lower_pressed_time) < TAPPING_TERM)) { 
-          register_code(KC_LCTL);
-          register_code(KC_SPC);
-          unregister_code(KC_SPC);
-          unregister_code(KC_LCTL);
+          register_code(KC_ESC);
+          unregister_code(KC_ESC);
         }
         lower_pressed = false;
       }
@@ -165,8 +163,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, raise_pressed_time) < TAPPING_TERM)) { 
-          register_code(KC_ESC);
-          unregister_code(KC_ESC);
+          register_code(KC_LCTL);
+          register_code(KC_SPC);
+          unregister_code(KC_SPC);
+          unregister_code(KC_LCTL);
         }
         raise_pressed = false;
       }
