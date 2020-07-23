@@ -1,0 +1,13 @@
+#pragma once
+
+#define TAPPING_FORCE_HOLD
+#define TAPPING_TERM 200
+
+// AUTO_SHIFT
+#define AUTO_SHIFT_TIMEOUT 200
+#define NO_AUTO_SHIFT_NUMERIC
+
+#undef MANUFACTURER
+#undef DESCRIPTION
+#define MANUFACTURER    Roy McCrain
+#define DESCRIPTION     30 percent
