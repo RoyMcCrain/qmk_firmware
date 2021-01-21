@@ -25,17 +25,17 @@ enum custom_keycodes {
 };
 
 // save cmd + s
-#define KC_SAVE LGUI(KC_S)
+#define KC_SAVE LCTL(KC_S)
 #define UNDO LGUI(KC_Z)
 #define CUT LGUI(KC_X)
 #define COPY LGUI(KC_C)
 #define PSTE LGUI(KC_V)
-// cmd + enter
-#define KC_CENT LGUI(KC_ENT)
-// cmd + h
-#define KC_CH LGUI(KC_H)
-// cmd + q
-#define KC_CQ LGUI(KC_Q)
+// ctl + enter
+#define KC_CENT LCTL(KC_ENT)
+// ctl + h
+#define KC_CH LCTL(KC_H)
+// ctl + q
+#define KC_CQ LCTL(KC_Q)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT( \
@@ -53,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, _______, _______, _______, KC_SLSH,KC_MINUS,                       KC_TAB,   KC_CH,   KC_CQ, KC_ASTR, KC_PLUS, _______,\
+      _______, _______, _______, _______, KC_SLSH,KC_MINUS,                       KC_TAB, KC_RALT,  KC_TAB, KC_ASTR, KC_PLUS, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -69,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,  KC_GRV, KC_BSLS,  KC_EQL, KC_SLSH,KC_MINUS,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, KC_UNDS, _______, \
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,    UNDO,     CUT,    COPY, KC_LPRN, KC_LBRC,                      KC_RBRC, KC_RPRN, KC_RGUI, _______, XXXXXXX, _______,\
+      _______,    UNDO,     CUT,    COPY, KC_LPRN, KC_LBRC,                      KC_RBRC, KC_RPRN, KC_RALT, _______, XXXXXXX, _______,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI,   LOWER,  KC_TAB,     KC_ENT,   RAISE, KC_BSPC \
                                       //`--------------------------'  `--------------------------'

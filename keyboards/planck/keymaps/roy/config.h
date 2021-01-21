@@ -40,3 +40,7 @@
 // ホイールの加速無効
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 0
 #define MOUSEKEY_WHEEL_MAX_SPEED 20
+
+#ifdef AUDIO_ENABLE
+    #define STARTUP_SONG SONG(NO_SOUND)
+#endif

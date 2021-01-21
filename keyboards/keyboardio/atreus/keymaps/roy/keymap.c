@@ -21,17 +21,17 @@ enum keycodes {
 };
 
 // save cmd + s
-#define KC_SAVE LGUI(KC_S)
-#define UNDO LGUI(KC_Z)
-#define CUT LGUI(KC_X)
-#define COPY LGUI(KC_C)
-#define PSTE LGUI(KC_V)
+#define KC_SAVE LCTL(KC_S)
+#define UNDO LCTL(KC_Z)
+#define CUT LCTL(KC_X)
+#define COPY LCTL(KC_C)
+#define PSTE LCTL(KC_V)
 // cmd + enter
-#define KC_CENT LGUI(KC_ENT)
+#define KC_CENT LCTL(KC_ENT)
 // cmd + h
-#define KC_CH LGUI(KC_H)
+#define KC_CH LCTL(KC_H)
 // cmd + q
-#define KC_CQ LGUI(KC_Q)
+#define KC_CQ LCTL(KC_Q)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -65,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT(
-    _______, _______, _______, KC_SLSH, KC_MINUS,                  KC_RGUI, KC_CH,    KC_CQ,   KC_ASTR, KC_PLUS,
+    _______, _______, _______, KC_SLSH, KC_MINUS,                  KC_RGUI, KC_RALT,  KC_TAB,  KC_ASTR, KC_PLUS,
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,     KC_8,    KC_9,    KC_0,
     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,    KC_F8,   KC_F9,   KC_F10,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT(
     KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
     KC_GRV,  KC_BSLS, KC_EQL,  KC_SLSH, KC_MINUS,                   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_UNDS,
-    UNDO,    CUT,     COPY,    KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, KC_RGUI, KC_RGUI, KC_RGUI,
+    UNDO,    CUT,     COPY,    KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, KC_RALT, KC_RGUI, KC_RGUI,
     _______, _______, _______, _______, KC_TAB,   _______, _______, _______, _______, _______, _______, _______ 
 ),
 
