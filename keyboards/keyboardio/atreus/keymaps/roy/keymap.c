@@ -21,7 +21,7 @@ enum keycodes {
 };
 
 // save cmd + s
-#define KC_SAVE LCTL(KC_S)
+#define SAVE LCTL(KC_S)
 #define UNDO LCTL(KC_Z)
 #define CUT LCTL(KC_X)
 #define COPY LCTL(KC_C)
@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_QUOT, KC_COMM, KC_DOT,        KC_P,    KC_Y,                               KC_F,    KC_G,    KC_C,    KC_R,    KC_L,
     KC_A,    KC_O,    KC_E,          KC_U,    KC_I,                               KC_D,    KC_H,    KC_T,    KC_N,    KC_S,
     KC_SCLN, KC_Q,    KC_J,          KC_K,    KC_X,    KC_LEFT,        KC_RIGHT,  KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,
-    KC_LGUI, KC_LALT, CTL_T(KC_ESC), LOWER,   KC_SPC,  CTL_T(KC_ESC),  KC_BSPC,   KC_ENT,  RAISE,   KC_BSPC, KC_RSFT, KC_DEL
+    KC_LGUI, KC_LALT, CTL_T(KC_ESC), LOWER,   KC_SPC,  CTL_T(KC_ESC),  KC_BSPC,   KC_ENT,  RAISE,   KC_BSPC, KC_RSFT, SAVE
 ),
 
 /* Lower
@@ -91,9 +91,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
- * |       |      |      |      |      |      |      |      |      |      |      |      |
+ * |       |      |      |      |      |      |      |      |      |  ↑   |      |      |
  * |-------+------+------+------+------+------+------+------+------+------+------+------|
- * |       |      |CLICK2|CLICK |      |      |      |  ←  |  ↓  |  ↑  |  →  |      |
+ * |       |      |CLICK2|CLICK |      |      |      |      |  ←  |  ↓  |   →  |      |
  * |-------+------+------+------+------+------+------+------+------+------+------+------|
  * |       |      |      |      |      |      |      |      |      |      |      |      |
  * |-------+------+------+------+------+------+------+------+------+------+------+------|
@@ -101,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT(
-    _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______,                   _______, KC_MS_L, KC_MS_U, _______, _______,
     _______, _______, KC_BTN2, KC_BTN1, _______,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
     UNDO,    CUT,     COPY,    PSTE,    _______, _______, _______, KC_WH_L, KC_WH_U, KC_WH_D, KC_WH_R, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
