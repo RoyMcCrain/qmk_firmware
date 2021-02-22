@@ -28,7 +28,8 @@ enum planck_keycodes {
   DVORAK = SAFE_RANGE,
   LOWER,
   RAISE,
-  ADJUST
+  ADJUST,
+  CONTROL
 };
 
 // save cmd + s
@@ -58,10 +59,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_DVORAK] = LAYOUT_planck_grid(
-    KC_QUOT, KC_COMM, KC_DOT,        KC_P,    KC_Y,   KC_TAB,  KC_DEL,   KC_F,    KC_G,    KC_C,    KC_R,    KC_L,
-    KC_A,    KC_O,    KC_E,          KC_U,    KC_I,   KC_LGUI, KC_CENT,  KC_D,    KC_H,    KC_T,    KC_N,    KC_S,
-    KC_SCLN, KC_Q,    KC_J,          KC_K,    KC_X,   KC_LALT, KC_RSFT,  KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,
-    KC_LGUI, KC_LALT, CTL_T(KC_ESC), LOWER,   KC_SPC, KC_SPC,  KC_ENT,   KC_ENT,  RAISE,   KC_BSPC, KC_RSFT, KC_DEL
+    KC_QUOT, KC_COMM, KC_DOT,   KC_P,    KC_Y,   KC_TAB,  KC_DEL,   KC_F,    KC_G,    KC_C,    KC_R,    KC_L,
+    KC_A,    KC_O,    KC_E,     KC_U,    KC_I,   KC_LGUI, KC_CENT,  KC_D,    KC_H,    KC_T,    KC_N,    KC_S,
+    KC_SCLN, KC_Q,    KC_J,     KC_K,    KC_X,   KC_LALT, KC_RSFT,  KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,
+    KC_LGUI, KC_LALT, CONTROL,  LOWER,   KC_SPC, KC_SPC,  KC_ENT,   KC_ENT,  RAISE,   KC_BSPC, KC_RSFT, KC_DEL
 ),
 
 /* Lower
@@ -128,6 +129,8 @@ static bool lower_pressed = false;
 static uint16_t lower_pressed_time = 0;
 static bool raise_pressed = false;
 static uint16_t raise_pressed_time = 0;
+static bool control_pressed = false;
+static uint16_t control_pressed_time = 0;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case DVORAK:
@@ -147,15 +150,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         // AUTO_SHIFTはTAPPING_TERMの二倍の時間待つ
         if (lower_pressed && (TIMER_DIFF_16(record->event.time, lower_pressed_time) < TAPPING_TERM * 2)) { 
+          register_code(KC_LANG1);
+          tap_code16(S(C(KC_SPC)));
           // AUTO_SHIFT_TIMEOUTより大きければシフトを入れる
           // example 処理は変わらない
-          if (TIMER_DIFF_16(record->event.time,lower_pressed_time) > AUTO_SHIFT_TIMEOUT) {
-            register_code(KC_ESC);
-            unregister_code(KC_ESC);
-          } else {
-            register_code(KC_ESC);
-            unregister_code(KC_ESC);
-          }
+          // if (TIMER_DIFF_16(record->event.time,lower_pressed_time) > AUTO_SHIFT_TIMEOUT) {
+          //   register_code(KC_ESC);
+          //   unregister_code(KC_ESC);
+          // } else {
+          //   register_code(KC_ESC);
+          //   unregister_code(KC_ESC);
+          // }
         }
         lower_pressed = false;
       }
@@ -171,30 +176,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, raise_pressed_time) < TAPPING_TERM * 2)) { 
-          register_code(KC_LCTL);
-          register_code(KC_SPC);
-          unregister_code(KC_SPC);
-          unregister_code(KC_LCTL);
+          register_code(KC_LANG2);
+          tap_code16(C(KC_SPC));
         }
         raise_pressed = false;
       }
       return false;
       break;
     case ADJUST:
-        if (record->event.pressed) {
-          layer_on(_ADJUST);
-        } else {
-          layer_off(_ADJUST);
+      if (record->event.pressed) {
+        layer_on(_ADJUST);
+      } else {
+        layer_off(_ADJUST);
+      }
+      return false;
+      break;
+    case CONTROL:
+      if (record->event.pressed) {
+        control_pressed = true;
+        control_pressed_time = record->event.time;
+        register_code(KC_LCTL);
+      } else {
+        unregister_code(KC_LCTL);
+        if (control_pressed && (TIMER_DIFF_16(record->event.time, control_pressed_time) < TAPPING_TERM * 2)) { 
+          tap_code16(KC_ESC);
+          tap_code16(S(C(KC_SPC)));
         }
-        return false;
-        break;
+        control_pressed = false;
+      }
+      return false;
+      break;
     default:
-        if (record->event.pressed) {
-            // reset the flag
-            lower_pressed = false;
-            raise_pressed = false;
-        }
-        break;
+      if (record->event.pressed) {
+        // reset the flag
+        lower_pressed = false;
+        raise_pressed = false;
+        control_pressed = false;
+      }
+      break;
   }
   return true;
 }
