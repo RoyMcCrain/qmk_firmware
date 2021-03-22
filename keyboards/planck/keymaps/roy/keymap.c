@@ -217,6 +217,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (control_pressed && (TIMER_DIFF_16(record->event.time, control_pressed_time) < TAPPING_TERM * 2)) { 
           tap_code16(KC_ESC);
           tap_code16(S(C(KC_SPC)));
+          naginata_off();
         }
         control_pressed = false;
       }
