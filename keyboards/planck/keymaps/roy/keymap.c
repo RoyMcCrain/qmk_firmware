@@ -215,6 +215,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(KC_LCTL);
         if (control_pressed && (TIMER_DIFF_16(record->event.time, control_pressed_time) < TAPPING_TERM * 2)) { 
+          // 日本語にしてからeisuにする
+          register_code(KC_LANG2);
           tap_code16(KC_ESC);
           tap_code16(S(C(KC_SPC)));
           naginata_off();

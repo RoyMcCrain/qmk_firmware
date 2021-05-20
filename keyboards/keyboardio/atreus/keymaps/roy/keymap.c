@@ -5,9 +5,15 @@
 
 #include QMK_KEYBOARD_H
 
+// 薙刀式
+#include "naginata.h"
+NGKEYS naginata_keys;
+// 薙刀式
+
 
 enum layers {
   _DVORAK,
+  _NAGINATA,
   _LOWER,
   _RAISE,
   _ADJUST
@@ -106,9 +112,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, KC_BTN2, KC_BTN1, _______,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
     UNDO,    CUT,     COPY,    PSTE,    _______, _______, _______, KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+),
+
+/* NAGINATA
+ * ,-----------------------------------------------------------------------------------.
+ * |       |      |      |      |      |      |      |      |      |      |      |      |
+ * |-------+------+------+------+------+------+------+------+------+------+------+------|
+ * |       |      |CLICK2|CLICK |      |      |      |  ←  |  ↓  |  ↑  |  →  |      |
+ * |-------+------+------+------+------+------+------+------+------+------+------+------|
+ * |       |      |      |      |      |      |      |      |      |      |      |      |
+ * |-------+------+------+------+------+------+------+------+------+------+------+------|
+ * |       |      |      |      |      |      |      |      |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_NAGINATA] = LAYOUT(
+    NG_Q   , NG_W   , NG_E   , NG_R   , NG_T   ,                   NG_Y   , NG_U   , NG_I   , NG_O   , NG_P   ,
+    NG_A   , NG_S   , NG_D   , NG_F   , NG_G   ,                   NG_H   , NG_J   , NG_K   , NG_L   , NG_SCLN,
+    NG_Z   , NG_X   , NG_C   , NG_V   , NG_B   , _______, _______, NG_N   , NG_M   , NG_COMM, NG_DOT , NG_SLSH,
+    _______, _______, _______, _______, NG_SHFT, NG_SHFT, NG_SHFT, NG_SHFT, _______, _______, _______, _______
 )
 
 };
+
+void matrix_init_user(void) {
+  // 薙刀式
+  uint16_t ngonkeys[] = {};
+  uint16_t ngoffkeys[] = {};
+  set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
+  // 薙刀式
+}
+
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
@@ -141,6 +174,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (lower_pressed && (TIMER_DIFF_16(record->event.time, lower_pressed_time) < TAPPING_TERM * 2)) { 
           register_code(KC_LANG1);
           tap_code16(S(C(KC_SPC)));
+          naginata_off();
           // AUTO_SHIFT_TIMEOUTより大きければシフトを入れる
           // example 処理は変わらない
           // if (TIMER_DIFF_16(record->event.time,lower_pressed_time) > AUTO_SHIFT_TIMEOUT) {
@@ -167,6 +201,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, raise_pressed_time) < TAPPING_TERM * 2)) { 
           register_code(KC_LANG2);
           tap_code16(C(KC_SPC));
+          naginata_on();
         }
         raise_pressed = false;
       }
@@ -202,7 +237,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         raise_pressed = false;
         control_pressed = false;
       }
-        break;
+      // 薙刀式
+      if (!process_naginata(keycode, record)) {
+        return false;
+      }
+      // 薙刀式
+      break;
   }
   return true;
 }
