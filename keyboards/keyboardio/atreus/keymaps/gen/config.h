@@ -1,0 +1,8 @@
+#pragma once
+
+#define TAPPING_FORCE_HOLD
+#define TAPPING_TERM 180
+
+// AUTO_SHIFT
+#define AUTO_SHIFT_TIMEOUT 145
+#define NO_AUTO_SHIFT_NUMERIC
