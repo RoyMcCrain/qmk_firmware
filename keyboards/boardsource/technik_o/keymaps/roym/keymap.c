@@ -2,7 +2,6 @@
 // 薙刀式
 #include "naginata.h"
 NGKEYS naginata_keys;
-// 薙刀式
 
 enum layers {
   _ASTARTE,
