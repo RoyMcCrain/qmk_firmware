@@ -2,7 +2,6 @@
 // 薙刀式
 #include "naginata.h"
 NGKEYS naginata_keys;
-// 薙刀式
 
 enum planck_layers {
     _ASTARTE,
@@ -127,7 +126,6 @@ void matrix_init_user(void) {
     uint16_t ngonkeys[]  = {};
     uint16_t ngoffkeys[] = {};
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
-    // 薙刀式
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
