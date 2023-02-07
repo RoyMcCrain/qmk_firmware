@@ -38,7 +38,6 @@ enum planck_keycodes {
 #define V_CU LCTL(KC_U)
 // Mission Control
 #define MC LCTL(KC_UP)
-#define ALIST LGUI(KC_TAB)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -110,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_ADJUST] = LAYOUT_planck_grid(
       KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
       _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-      KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  _______, _______, MC,      ALIST,   _______, _______, _______,
+      KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  _______, _______, _______, MC,      _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 
