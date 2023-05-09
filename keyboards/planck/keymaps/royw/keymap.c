@@ -127,8 +127,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_NAGINATA_RAISE] = LAYOUT_planck_grid(
       KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, TPBM,    RTLF,
       KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
-      _______, _______, _______, N_LEFT,  N_RGHT,   _______, _______, _______, _______, _______, _______,  _______,
-      _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______, _______,  _______
+      N_LEFT,  N_RGHT,  KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, V_CD,    V_CU,    _______,
+      _______, _______, _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______,  _______
   )
 
 };
