@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "os_detection.h"
 // 薙刀式
 #include "naginata.h"
 NGKEYS naginata_keys;
@@ -7,8 +8,9 @@ enum planck_layers {
     _ASTARTE,
     _NAGINATA,
     _LOWER,
+    _LOWER_MAC,
     _RAISE,
-    _ADJUST,
+    _ADJUST
 };
 
 enum planck_keycodes {
@@ -24,25 +26,32 @@ enum planck_keycodes {
   V_Q
 };
 
-#define UNDO LGUI(KC_Z)
-#define CUT LGUI(KC_X)
-#define COPY LGUI(KC_C)
-#define PSTE LGUI(KC_V)
-#define GENT LGUI(KC_ENT)
+#define UNDO LCTL(KC_Z)
+#define CUT LCTL(KC_X)
+#define COPY LCTL(KC_C)
+#define PSTE LCTL(KC_V)
+#define GENT LCTL(KC_ENT)
+#define SLP  LGUI(KC_L)
+
+#define MUNDO LGUI(KC_Z)
+#define MCUT LGUI(KC_X)
+#define MCOPY LGUI(KC_C)
+#define MPSTE LGUI(KC_V)
+#define MGENT LGUI(KC_ENT)
 // ctl+[ (esc)
 #define AESC RCS(KC_LBRC)
 #define V_SV LSFT(KC_V)
-#define V_CV LCTL(KC_V)
-#define V_CD LCTL(KC_D)
-#define V_CU LCTL(KC_U)
+#define V_CJ LCTL(KC_J)
 // Mission Control
-#define MC LCTL(KC_UP)
+#define MC LGUI(KC_TAB)
+#define N_LEFT LSFT(KC_LEFT)
+#define N_RGHT LSFT(KC_RGHT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Astarte
    * ,-----------------------------------------------------------------------------------.
-   * |   Q  |   P  |   U  |   Y  |   ,  |      |      |   J  |   D  |   H  |   G  |   W  |
+   * |   Q |   P  |   U  |   Y  |   ,  |      |      |   J  |   D  |   H  |   G  |   W  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
    * |   I  |   O  |   E  |   A  |   .  |      |      |   K  |   T  |   N  |   S  |   R  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -55,43 +64,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_TAB,  KC_ESC,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
       KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_LGUI, KC_ENT,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
       KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_LALT, KC_RSFT, KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-      KC_LGUI, KC_LALT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LSFT, KC_DEL
+      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
   ),
 
   /* Lower
    * ,-----------------------------------------------------------------------------------.
-   * |      | PSTE | UNDO | COPY |      |      |      |      |      |      |      |      |
+   * |      | PSTE | UNDO | COPY |      |      |      |  F6  |  F7  |  F8  |  F9  | F10  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
    * |   1  |   2  |   3  |   4  |   5  |      |      |   6  |   7  |   8  |   9  |   0  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |  ;q  |  ;w  |  ZZ  |      |      | C V  |  S v |      |      |      |
+   * |      |      |  ;q  |  ;w  |  ZZ  |      |      | C j  |  S v |  S ← |  S → |      |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |  ENT |      | DEL  |      |      |
+   * |      |      |      |      |      |      |      |G ENT |      | DEL  |      |      |
    * `-----------------------------------------------------------------------------------'
    */
   [_LOWER] = LAYOUT_planck_grid(
-      _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, _______, _______, _______, _______,  _______,
+      _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
       KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,    KC_7,    KC_8,    KC_9,     KC_0,
-      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CV,    V_SV,    _______, _______,  _______,
+      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,    V_SV,    N_LEFT,  N_RGHT,   _______,
       _______, _______, _______, _______, _______,  _______, GENT,    GENT,    _______, KC_DEL,  _______,  _______
+  ),
+
+  [_LOWER_MAC] = LAYOUT_planck_grid(
+      _______, MPSTE,   MUNDO,   MCOPY,   _______,  _______, _______, LCTL(KC_J), LCTL(KC_K), LCTL(KC_SCLN),   LCTL(KC_L),  KC_F10,
+      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,       KC_7,       KC_8,    KC_9,     KC_0,
+      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,       V_SV,       N_LEFT,  N_RGHT,   _______,
+      _______, _______, _______, _______, _______,  _______, MGENT,   MGENT,      _______,    KC_DEL,  _______,  _______
   ),
 
   /* Raise
    * ,-----------------------------------------------------------------------------------.
-   * |   !  |   @  |   #  |   $  |   %  |      |      |   ^  |   &  |   *  | TPBM | RTLF |
+   * |   !  |   @  |   #  |   $  |   %  |      |      |   ^  |   &  |   *  | RALT |  MC  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
    * |   \  |   `  |   =  |   /  |   -  |      |      |   ←  |   ↓  |   ↑  |   →  |      |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |   _  |   (  |   [  |      |      |   ]  |  )   | C d  | C u  |      |
+   * |      |      |   _  |   (  |   [  |      |      |   ]  |  )   | RTLF | TPBM |      |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
    * |      |      |      |      | TAB  |      |      |      |      |      |      |      |
    * `-----------------------------------------------------------------------------------'
    */
   [_RAISE] = LAYOUT_planck_grid(
-      KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, TPBM,    RTLF,
+      KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_RALT, MC,
       KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-      _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, V_CD,    V_CU,    _______,
-      _______, _______, AESC,    _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
+      _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, RTLF,    TPBM,    _______,
+      _______, AESC,    _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
   ),
 
   /* Adjust (Lower + Raise)
@@ -106,9 +122,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * `-----------------------------------------------------------------------------------'
    */
   [_ADJUST] = LAYOUT_planck_grid(
-      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
+      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   RESET,   _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
       _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-      KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  _______, _______, _______, MC,      _______, _______, _______,
+      KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, MC,      _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 
@@ -126,41 +142,70 @@ void matrix_init_user(void) {
     uint16_t ngonkeys[]  = {};
     uint16_t ngoffkeys[] = {};
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
+    // 薙刀式
+}
+
+uint32_t last_keypress = 0;
+void matrix_scan_user(void) {
+  // 2秒間キーが押されていなかったら薙刀式を解除する
+  if (timer_elapsed32(last_keypress) > 2000) {
+    naginata_off();
+  }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+static uint16_t host_os;
+void keyboard_post_init_user(void) {
+  wait_ms(400);
+  host_os = detected_host_os();
+}
+
 static bool     lower_pressed        = false;
 static bool     raise_pressed        = false;
 static bool     control_pressed      = false;
 static uint16_t pressed_time         = 0;
+
+
 bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        // キー操作を監視する
+        last_keypress = timer_read32();
+    }
     switch (keycode) {
         case ASTARTE:
             if (record->event.pressed) {
                 default_layer_set(_ASTARTE);
             }
             return false;
-            break;
         case LOWER:
             if (record->event.pressed) {
                 lower_pressed      = true;
                 pressed_time = record->event.time;
-                layer_on(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                // AUTO_SHIFTはTAPPING_TERMの2倍の時間待つ
-                if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
-                    naginata_off();
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    layer_on(_LOWER_MAC);
+                    update_tri_layer(_LOWER_MAC, _RAISE, _ADJUST);
+                } else {
+                    layer_on(_LOWER);
+                    update_tri_layer(_LOWER, _RAISE, _ADJUST);
                 }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    layer_off(_LOWER_MAC);
+                    update_tri_layer(_LOWER_MAC, _RAISE, _ADJUST);
+                } else {
+                    layer_off(_LOWER);
+                    update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                }
+                // // AUTO_SHIFTはTAPPING_TERMの2倍の時間待つ
+                // if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
+                //     naginata_off();
+                // }
                 lower_pressed = false;
             }
             return false;
-            break;
         case RAISE:
             if (record->event.pressed) {
                 raise_pressed      = true;
@@ -176,7 +221,6 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
                 raise_pressed = false;
             }
             return false;
-            break;
         case CONTROL:
             if (record->event.pressed) {
                 control_pressed      = true;
@@ -192,7 +236,6 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
                 control_pressed = false;
             }
             return false;
-            break;
         case ADJUST:
             if (record->event.pressed) {
                 layer_on(_ADJUST);
@@ -200,49 +243,43 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
                 layer_off(_ADJUST);
             }
             return false;
-            break;
         case RTLF:
             if (record->event.pressed) {
                 pressed_time = record->event.time;
             } else {
                 if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(C(KC_A));
+                    tap_code16(KC_HOME);
                 } else {
-                    tap_code16(C(KC_E));
+                    tap_code16(KC_END);
                 }
             }
             return false;
-            break;
         case TPBM:
             if (record->event.pressed) {
                 pressed_time = record->event.time;
             } else {
                 if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(G(KC_DOWN));
+                    tap_code16(C(KC_HOME));
                 } else {
-                    tap_code16(G(KC_UP));
+                    tap_code16(C(KC_END));
                 }
             }
             return false;
-            break;
         case V_W:
             if (record->event.pressed) {
               SEND_STRING(";w\n");
             }
             return false;
-            break;
         case V_WQ:
             if (record->event.pressed) {
               SEND_STRING("ZZ\n");
             }
             return false;
-            break;
         case V_Q:
             if (record->event.pressed) {
               SEND_STRING(";q\n");
             }
             return false;
-            break;
         default:
             if (record->event.pressed) {
                 // reset the flag

@@ -16,12 +16,8 @@
 
 #pragma once
 
-void naginata_type(void);
+uint8_t naginata_type(bool);
 void naginata_clear(void);
-void compress_buffer(int nt);
-bool naginata_lookup(int nt, bool shifted);
-int number_of_candidates(void);
-int count_bit(uint32_t);
 
 bool process_modifier(uint16_t, keyrecord_t *);
 
@@ -35,14 +31,40 @@ void ng_show_os(void);
 void mac_live_conversion_toggle(void);
 void tategaki_toggle(void);
 void kouchi_shift_toggle(void);
-void ty_send_string(char *);
-void copyTYtable(void);
 
 bool process_naginata(uint16_t, keyrecord_t *);
 // void set_naginata(uint8_t);
 void set_naginata(uint8_t, uint16_t *, uint16_t *);
 
-// bool enable_naginata(uint16_t, keyrecord_t *);
+typedef struct {
+  uint16_t keycode;
+  uint16_t pressTime;
+  uint16_t releaseTime;
+} Keystroke;
+
+uint8_t evaluate(void);
+uint32_t scoring(Keystroke[], uint8_t);
+
+bool check_henshu(void);
+bool exec_henshu(uint32_t);
+void ng_cut(void);
+void ng_copy(void);
+void ng_paste(void);
+void ng_up(uint8_t);
+void ng_down(uint8_t);
+void ng_left(uint8_t);
+void ng_right(uint8_t);
+void ng_home(void);
+void ng_end(void);
+void ng_katakana(void);
+void ng_save(void);
+void ng_hiragana(void);
+void ng_redo(void);
+void ng_undo(void);
+void ng_saihenkan(void);
+void ng_eof(void);
+
+// bool enable_naginata(uuint8_t16_t, keyrecord_t *);
 
 // なぜKC_キーコードを使わず、NG_キーコードを定義するのか
 // 1. 英字レイアウトがQWERTYでない場合でもOK
@@ -114,4 +136,3 @@ user_config_t naginata_config;
 #define NG_WIN 1
 #define NG_MAC 2
 #define NG_LINUX 3
-
