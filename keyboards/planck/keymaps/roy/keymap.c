@@ -147,8 +147,8 @@ void matrix_init_user(void) {
 
 uint32_t last_keypress = 0;
 void matrix_scan_user(void) {
-  // 2秒間キーが押されていなかったら薙刀式を解除する
-  if (timer_elapsed32(last_keypress) > 2000) {
+  // 2.5秒間キーが押されていなかったら薙刀式を解除する
+  if (timer_elapsed32(last_keypress) > 2500) {
     naginata_off();
   }
 }
@@ -199,10 +199,10 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
                     layer_off(_LOWER);
                     update_tri_layer(_LOWER, _RAISE, _ADJUST);
                 }
-                // // AUTO_SHIFTはTAPPING_TERMの2倍の時間待つ
-                // if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
-                //     naginata_off();
-                // }
+                // AUTO_SHIFTはTAPPING_TERMの2倍の時間待つ
+                if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
+                    naginata_off();
+                }
                 lower_pressed = false;
             }
             return false;
