@@ -57,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |------+------+------+------+------+------+------+------+------+------+------+------|
    * |   Z  |   X  |   '  |   C  |   ;  |      |      |   M  |   L  |   F  |   B  |   V  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * | GUI  | ALT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  SFT |  DEL |
+   * | GUI  | SFT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  ALT |  DEL |
    * `-----------------------------------------------------------------------------------'
    */
   [_ASTARTE] = LAYOUT_planck_grid(
@@ -138,11 +138,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void matrix_init_user(void) {
-    // 薙刀式
-    uint16_t ngonkeys[]  = {};
+    uint16_t ngonkeys[] = {};
     uint16_t ngoffkeys[] = {};
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
-    // 薙刀式
 }
 
 uint32_t last_keypress = 0;
@@ -165,13 +163,13 @@ void keyboard_post_init_user(void) {
   host_os = detected_host_os();
 }
 
-static bool     lower_pressed        = false;
-static bool     raise_pressed        = false;
-static bool     control_pressed      = false;
-static uint16_t pressed_time         = 0;
+static bool lower_pressed = false;
+static bool raise_pressed = false;
+static bool control_pressed = false;
+static uint16_t pressed_time = 0;
 
 
-bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         // キー操作を監視する
         last_keypress = timer_read32();
@@ -184,7 +182,7 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case LOWER:
             if (record->event.pressed) {
-                lower_pressed      = true;
+                lower_pressed = true;
                 pressed_time = record->event.time;
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
                     layer_on(_LOWER_MAC);
@@ -210,7 +208,7 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case RAISE:
             if (record->event.pressed) {
-                raise_pressed      = true;
+                raise_pressed = true;
                 pressed_time = record->event.time;
                 layer_on(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
@@ -225,7 +223,7 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case CONTROL:
             if (record->event.pressed) {
-                control_pressed      = true;
+                control_pressed = true;
                 pressed_time = record->event.time;
                 register_code(KC_LCTL);
             } else {
@@ -285,8 +283,8 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             if (record->event.pressed) {
                 // reset the flag
-                lower_pressed   = false;
-                raise_pressed   = false;
+                lower_pressed = false;
+                raise_pressed = false;
                 control_pressed = false;
             }
             // 薙刀式
@@ -295,6 +293,5 @@ bool            process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
     }
-
     return true;
 }
