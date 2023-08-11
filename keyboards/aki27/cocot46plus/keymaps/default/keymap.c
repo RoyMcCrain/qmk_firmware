@@ -115,24 +115,24 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _LOWER:
-        rgblight_sethsv_range(HSV_BLUE, 0, 2);
+        // rgblight_sethsv_range(HSV_BLUE, 0, 2);
         cocot_set_scroll_mode(true);
         break;
     case _RAISE:
-        rgblight_sethsv_range(HSV_RED, 0, 2);
+        // rgblight_sethsv_range(HSV_RED, 0, 2);
         cocot_set_scroll_mode(true);
         break;
     case _TRACKBALL:
-        rgblight_sethsv_range(HSV_GREEN, 0, 2);
+        // rgblight_sethsv_range(HSV_GREEN, 0, 2);
         cocot_set_scroll_mode(false);
         break;
     default:
-        rgblight_sethsv_range( 0, 0, 0, 0, 2);
+        // rgblight_sethsv_range( 0, 0, 0, 0, 2);
         cocot_set_scroll_mode(false);
         break;
     }
-    rgblight_set_effect_range( 2, 10);
-      return state;
+    // rgblight_set_effect_range( 2, 10);
+    return state;
 };
 
 
