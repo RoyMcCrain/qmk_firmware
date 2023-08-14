@@ -1,5 +1,5 @@
 #include QMK_KEYBOARD_H
-// 薙刀式
+#include "os_detection.h"
 #include "naginata.h"
 NGKEYS naginata_keys;
 
@@ -7,6 +7,7 @@ enum layers {
   _ASTARTE,
   _NAGINATA,
   _LOWER,
+  _LOWER_MAC,
   _RAISE,
   _ADJUST,
 };
@@ -29,14 +30,21 @@ enum keycodes {
 #define COPY LCTL(KC_C)
 #define PSTE LCTL(KC_V)
 #define GENT LCTL(KC_ENT)
+#define SLP  LGUI(KC_L)
+
+#define MUNDO LGUI(KC_Z)
+#define MCUT LGUI(KC_X)
+#define MCOPY LGUI(KC_C)
+#define MPSTE LGUI(KC_V)
+#define MGENT LGUI(KC_ENT)
 // ctl+[ (esc)
 #define AESC RCS(KC_LBRC)
 #define V_SV LSFT(KC_V)
-#define V_CV LCTL(KC_V)
-#define V_CD LCTL(KC_D)
-#define V_CU LCTL(KC_U)
+#define V_CJ LCTL(KC_J)
 // Mission Control
 #define MC LGUI(KC_TAB)
+#define N_LEFT LSFT(KC_LEFT)
+#define N_RGHT LSFT(KC_RGHT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -48,14 +56,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |   Z  |   X  |   '  |   C  |   ;  |      |      |   M  |   L  |   F  |   B  |   V  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | GUI  | ALT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  SFT |  DEL |
+ * | GUI  | SFT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  ALT |  DEL |
  * `-----------------------------------------------------------------------------------'
  */
   [_ASTARTE] = LAYOUT_ortho_4x12(
       KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_TAB,  KC_ESC,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
       KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_LGUI, KC_ENT,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
       KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_LALT, KC_RSFT, KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-      KC_LGUI, KC_LALT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LSFT, KC_DEL
+      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
   ),
 
 /* Lower
@@ -70,10 +78,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
   [_LOWER] = LAYOUT_ortho_4x12(
-      _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, _______, _______, _______, _______,  _______,
+      _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
       KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,    KC_7,    KC_8,    KC_9,     KC_0,
-      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CV,    V_SV,    _______, _______,  _______,
+      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,    V_SV,    N_LEFT,  N_RGHT,   _______,
       _______, _______, _______, _______, _______,  _______, GENT,    GENT,    _______, KC_DEL,  _______,  _______
+  ),
+
+  [_LOWER_MAC] = LAYOUT_ortho_4x12(
+      _______, MPSTE,   MUNDO,   MCOPY,   _______,  _______, _______, LCTL(KC_J), LCTL(KC_K), LCTL(KC_SCLN),   LCTL(KC_L),  KC_F10,
+      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,       KC_7,       KC_8,    KC_9,     KC_0,
+      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,       V_SV,       N_LEFT,  N_RGHT,   _______,
+      _______, _______, _______, _______, _______,  _______, MGENT,   MGENT,      _______,    KC_DEL,  _______,  _______
   ),
 
 /* Raise
@@ -88,10 +103,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
   [_RAISE] = LAYOUT_ortho_4x12(
-      KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, TPBM,    RTLF,
-      KC_GRV,  KC_BSLS, KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-      _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, V_CD,    V_CU,    _______,
-      _______, _______, AESC,    _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
+      KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_RALT, MC,
+      KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+      _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, RTLF,    TPBM,    _______,
+      _______, AESC,    _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
   ),
 
 /* Adjust (Lower + Raise)
@@ -108,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_ADJUST] = LAYOUT_ortho_4x12(
       KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
       _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-      KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,  _______, _______, _______, MC,      _______, _______, _______,
+      KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, MC,      _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 
@@ -122,22 +137,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void matrix_init_user(void) {
-  // 薙刀式
   uint16_t ngonkeys[] = {};
   uint16_t ngoffkeys[] = {};
   set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
-  // 薙刀式
+}
+
+uint32_t last_keypress = 0;
+void matrix_scan_user(void) {
+  // *秒間キーが押されていなかったら薙刀式を解除する
+  if (timer_elapsed32(last_keypress) > 4000) {
+    if (naginata_state()) {
+        naginata_off();
+    }
+  }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+static uint16_t host_os;
+void keyboard_post_init_user(void) {
+  wait_ms(400);
+  host_os = detected_host_os();
+}
+
 static bool lower_pressed = false;
 static bool raise_pressed = false;
 static bool control_pressed = false;
 static uint16_t pressed_time = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+     // キー操作を監視する
+     last_keypress = timer_read32();
+  }
   switch (keycode) {
     case ASTARTE:
       if (record->event.pressed) {
@@ -149,13 +183,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         lower_pressed = true;
         pressed_time = record->event.time;
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        if (host_os == OS_MACOS || host_os == OS_IOS) {
+            layer_on(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        } else {
+            layer_on(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        }
       } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        if (host_os == OS_MACOS || host_os == OS_IOS) {
+            layer_off(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        } else {
+            layer_off(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        }
         // AUTO_SHIFTはTAPPING_TERMの二倍の時間待つ
-        if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) { 
+        if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
           naginata_off();
         }
         lower_pressed = false;
@@ -171,7 +215,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 1.2)) { 
+        if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 1.2)) {
           naginata_on();
         }
         raise_pressed = false;
@@ -185,7 +229,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_LCTL);
       } else {
         unregister_code(KC_LCTL);
-        if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) { 
+        if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
           // 日本語にしてからeisuにする
           naginata_off();
           tap_code16(KC_ESC);

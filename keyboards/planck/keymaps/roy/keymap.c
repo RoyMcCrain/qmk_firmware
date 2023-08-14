@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 #include "os_detection.h"
-// 薙刀式
 #include "naginata.h"
 NGKEYS naginata_keys;
 
@@ -122,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * `-----------------------------------------------------------------------------------'
    */
   [_ADJUST] = LAYOUT_planck_grid(
-      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   RESET,   _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
+      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
       _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
       KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, MC,      _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
@@ -145,8 +144,8 @@ void matrix_init_user(void) {
 
 uint32_t last_keypress = 0;
 void matrix_scan_user(void) {
-  // 2.5秒間キーが押されていなかったら薙刀式を解除する
-  if (timer_elapsed32(last_keypress) > 2500) {
+  // *秒間キーが押されていなかったら薙刀式を解除する
+  if (timer_elapsed32(last_keypress) > 4000) {
     if (naginata_state()) {
         naginata_off();
     }
@@ -167,7 +166,6 @@ static bool lower_pressed = false;
 static bool raise_pressed = false;
 static bool control_pressed = false;
 static uint16_t pressed_time = 0;
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
