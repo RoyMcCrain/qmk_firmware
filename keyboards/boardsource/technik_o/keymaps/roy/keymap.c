@@ -145,7 +145,7 @@ void matrix_init_user(void) {
 uint32_t last_keypress = 0;
 void matrix_scan_user(void) {
   // *秒間キーが押されていなかったら薙刀式を解除する
-  if (timer_elapsed32(last_keypress) > 4000) {
+  if (timer_elapsed32(last_keypress) > 10000) {
     if (naginata_state()) {
         naginata_off();
     }
