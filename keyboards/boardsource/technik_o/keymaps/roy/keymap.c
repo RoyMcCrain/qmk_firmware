@@ -7,7 +7,7 @@ enum layers {
   _ASTARTE,
   _NAGINATA,
   _LOWER,
-  _LOWER_MAC,
+  _RIGHT,
   _RAISE,
   _ADJUST,
 };
@@ -20,23 +20,18 @@ enum keycodes {
   ADJUST,
   TPBM,
   RTLF,
+  UNDO,
+  CUT,
+  COPY,
+  PSTE,
+  GENT,
   V_W,
   V_WQ,
   V_Q
 };
 
-#define UNDO LCTL(KC_Z)
-#define CUT LCTL(KC_X)
-#define COPY LCTL(KC_C)
-#define PSTE LCTL(KC_V)
-#define GENT LCTL(KC_ENT)
 #define SLP  LGUI(KC_L)
 
-#define MUNDO LGUI(KC_Z)
-#define MCUT LGUI(KC_X)
-#define MCOPY LGUI(KC_C)
-#define MPSTE LGUI(KC_V)
-#define MGENT LGUI(KC_ENT)
 #define V_SV LSFT(KC_V)
 #define V_CJ LCTL(KC_J)
 // Mission Control
@@ -82,13 +77,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, _______, _______, _______, _______,  _______, GENT,    GENT,    _______, KC_DEL,  _______,  _______
   ),
 
-  [_LOWER_MAC] = LAYOUT_ortho_4x12(
-      _______, MPSTE,   MUNDO,   MCOPY,   _______,  _______, _______, LCTL(KC_J), LCTL(KC_K), LCTL(KC_SCLN),   LCTL(KC_L),  KC_F10,
-      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,       KC_7,       KC_8,    KC_9,     KC_0,
-      _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,       V_SV,       N_LEFT,  N_RGHT,   _______,
-      _______, _______, _______, _______, _______,  _______, MGENT,   MGENT,      _______,    KC_DEL,  _______,  _______
-  ),
-
 /* Raise
  * ,-----------------------------------------------------------------------------------.
  * |   !  |   @  |   #  |   $  |   %  |      |      |   ^  |   &  |   *  | COPY | UNDO |
@@ -105,6 +93,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
       _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, RTLF,    TPBM,    _______,
       _______, _______, _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
+  ),
+
+  [_RIGHT] = LAYOUT_ortho_4x12(
+      _______, _______, _______, _______, _______, _______, _______, _______, KC_WH_U, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, KC_WH_D, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN2, KC_BTN1, _______, _______, _______
   ),
 
 /* Adjust (Lower + Raise)
@@ -133,6 +128,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 
 };
+
+enum combos {
+    C_ENTER,
+    C_RIGHT,
+    C_NAGINATA,
+};
+
+const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
+const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
+const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
+combo_t key_combos[] = {
+  [C_ENTER] = COMBO(enter_combo, KC_ENT),
+  [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
+  [C_NAGINATA] = COMBO_ACTION(naginata_combo),
+};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    switch(combo_index) {
+        case C_NAGINATA:
+            if (pressed) {
+                naginata_on();
+            }
+        break;
+    }
+}
 
 void matrix_init_user(void) {
   uint16_t ngonkeys[] = {};
@@ -181,21 +201,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         lower_pressed = true;
         pressed_time = record->event.time;
-        if (host_os == OS_MACOS || host_os == OS_IOS) {
-            layer_on(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        } else {
-            layer_on(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        }
+        layer_on(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
-        if (host_os == OS_MACOS || host_os == OS_IOS) {
-            layer_off(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        } else {
-            layer_off(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        }
+        layer_off(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
         // AUTO_SHIFTはTAPPING_TERMの二倍の時間待つ
         if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
           naginata_off();
@@ -214,7 +224,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 1.2)) {
-          naginata_on();
+            tap_code16(KC_TAB);
         }
         raise_pressed = false;
       }
@@ -268,6 +278,51 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return false;
         break;
+    case UNDO:
+        if (record->event.pressed) {
+            if (host_os == OS_MACOS || host_os == OS_IOS) {
+                tap_code16(G(KC_Z));
+            } else {
+                tap_code16(C(KC_Z));
+            }
+        }
+        return false;
+    case CUT:
+        if (record->event.pressed) {
+            if (host_os == OS_MACOS || host_os == OS_IOS) {
+                tap_code16(G(KC_X));
+            } else {
+                tap_code16(C(KC_X));
+            }
+        }
+        return false;
+    case COPY:
+        if (record->event.pressed) {
+            if (host_os == OS_MACOS || host_os == OS_IOS) {
+                tap_code16(G(KC_C));
+            } else {
+                tap_code16(C(KC_C));
+            }
+        }
+        return false;
+    case PSTE:
+        if (record->event.pressed) {
+            if (host_os == OS_MACOS || host_os == OS_IOS) {
+                tap_code16(G(KC_V));
+            } else {
+                tap_code16(C(KC_V));
+            }
+        }
+        return false;
+    case GENT:
+        if (record->event.pressed) {
+            if (host_os == OS_MACOS || host_os == OS_IOS) {
+                tap_code16(G(KC_ENT));
+            } else {
+                tap_code16(C(KC_ENT));
+            }
+        }
+        return false;
     case V_W:
         if (record->event.pressed) {
           SEND_STRING(";w\n");

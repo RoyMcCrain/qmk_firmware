@@ -146,7 +146,7 @@ combo_t key_combos[] = {
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
-        case C_N:
+        case C_NAGINATA:
             if (pressed) {
                 naginata_on();
             }
