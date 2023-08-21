@@ -321,6 +321,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 tap_code16(C(KC_ENT));
             }
+            naginata_off();
         }
         return false;
     case V_W:
