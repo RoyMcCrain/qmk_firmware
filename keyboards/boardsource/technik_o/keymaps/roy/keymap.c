@@ -43,20 +43,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Astarte
  * ,-----------------------------------------------------------------------------------.
- * |   Q  |   P  |   U  |   Y  |   ,  |      |      |   J  |   D  |   H  |   G  |   W  |
+ * |   Q  |   P  |   U  |   Y  |   ,  |XXXXXX|XXXXXX|   J  |   D  |   H  |   G  |   W  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |   I  |   O  |   E  |   A  |   .  |      |      |   K  |   T  |   N  |   S  |   R  |
+ * |   I  |   O  |   E  |   A  |   .  |XXXXXX|XXXXXX|   K  |   T  |   N  |   S  |   R  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |   Z  |   X  |   '  |   C  |   ;  |      |      |   M  |   L  |   F  |   B  |   V  |
+ * |   Z  |   X  |   '  |   C  |   ;  |XXXXXX|XXXXXX|   M  |   L  |   F  |   B  |   V  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | GUI  | SFT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  ALT |  DEL |
+ * | GUI  | SFT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  ALT | PSCR |
  * `-----------------------------------------------------------------------------------'
  */
   [_ASTARTE] = LAYOUT_ortho_4x12(
-      KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_TAB,  KC_ESC,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
-      KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_LGUI, KC_ENT,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
-      KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_LALT, KC_RSFT, KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
+      KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
+      KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
+      KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
+      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
   ),
 
 /* Lower
@@ -132,27 +132,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 enum combos {
     C_ENTER,
     C_RIGHT,
-    C_NAGINATA,
+    // C_NAGINATA,
 };
 
 const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
-const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
+// const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
-  [C_NAGINATA] = COMBO_ACTION(naginata_combo),
+  // [C_NAGINATA] = COMBO_ACTION(naginata_combo),
 };
 
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
-        case C_NAGINATA:
-            if (pressed) {
-                naginata_on();
-            }
-        break;
-    }
-}
+// void process_combo_event(uint16_t combo_index, bool pressed) {
+//     switch(combo_index) {
+//         case C_NAGINATA:
+//             if (pressed) {
+//                 naginata_on();
+//             }
+//         break;
+//     }
+// }
 
 void matrix_init_user(void) {
   uint16_t ngonkeys[] = {};
@@ -224,7 +224,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
         if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 1.2)) {
-            tap_code16(KC_TAB);
+            naginata_on();
         }
         raise_pressed = false;
       }
@@ -238,9 +238,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(KC_LCTL);
         if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
-          // 日本語にしてからeisuにする
-          naginata_off();
-          tap_code16(KC_ESC);
+            // 日本語にしてからeisuにする
+            if (naginata_state()) {
+                naginata_off();
+            }
+            tap_code16(KC_ESC);
         }
         control_pressed = false;
       }

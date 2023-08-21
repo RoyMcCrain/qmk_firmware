@@ -43,20 +43,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Astarte
    * ,-----------------------------------------------------------------------------------.
-   * |   Q  |   P  |   U  |   Y  |   ,  |      |      |   J  |   D  |   H  |   G  |   W  |
+   * |   Q  |   P  |   U  |   Y  |   ,  |XXXXXX|XXXXXX|   J  |   D  |   H  |   G  |   W  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |   I  |   O  |   E  |   A  |   .  |      |      |   K  |   T  |   N  |   S  |   R  |
+   * |   I  |   O  |   E  |   A  |   .  |XXXXXX|XXXXXX|   K  |   T  |   N  |   S  |   R  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * |   Z  |   X  |   '  |   C  |   ;  |      |      |   M  |   L  |   F  |   B  |   V  |
+   * |   Z  |   X  |   '  |   C  |   ;  |XXXXXX|XXXXXX|   M  |   L  |   F  |   B  |   V  |
    * |------+------+------+------+------+------+------+------+------+------+------+------|
-   * | GUI  | SFT  | Ctrl |Lower |Space |      |      | ENT  | Raise| BCSP |  ALT |  DEL |
+   * | GUI  | SFT  | Ctrl |Lower |Space |Space | ENT  | ENT  | Raise| BCSP |  ALT | PSCR |
    * `-----------------------------------------------------------------------------------'
    */
   [_ASTARTE] = LAYOUT_planck_grid(
-      KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_TAB,  KC_ESC,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
-      KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_LGUI, KC_ENT,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
-      KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_LALT, KC_RSFT, KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC,  KC_ENT,  KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
+      KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
+      KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
+      KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
+      KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_PSCR
   ),
 
   /* Lower
