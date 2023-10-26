@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "os_detection.h"
 #include "naginata.h"
+#include "keymap_japanese.h"
 NGKEYS naginata_keys;
 
 enum planck_layers {
@@ -27,7 +28,13 @@ enum planck_keycodes {
     GENT,
     V_W,
     V_WQ,
-    V_Q
+    V_Q,
+    QUOT,
+    SCLN,
+    BSLS,
+    GRV,
+    MINS,
+    EQL,
 };
 
 #define SLP  LGUI(KC_L)
@@ -56,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_ASTARTE] = LAYOUT_planck_grid(
         KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
         KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
-        KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN, KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
+        KC_Z,    KC_X,    QUOT,    KC_C,  SCLN,    KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
         KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, RGT
     ),
 
@@ -90,9 +97,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      */
     [_RAISE] = LAYOUT_planck_grid(
-        KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  _______, _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_RALT, MC,
-        KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,  _______, _______, KC_RBRC, KC_RPRN, RTLF,    TPBM,    _______,
+        JP_EXLM, JP_AT,   JP_HASH, JP_DLR,  JP_PERC,  _______, _______, JP_CIRC, JP_AMPR, JP_ASTR, KC_RALT, MC,
+        BSLS,    GRV,     EQL,     JP_SLSH, MINS,     _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+        _______, _______, JP_UNDS, JP_LPRN, JP_LBRC,  _______, _______, JP_RBRC, JP_RPRN, RTLF,    TPBM,    _______,
         _______, _______, _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
     ),
 
@@ -345,6 +352,72 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case V_Q:
             if (record->event.pressed) {
                 SEND_STRING(";q\n");
+            }
+            return false;
+        case QUOT:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_DQUO);
+                } else {
+                    tap_code16(JP_QUOT);
+                }
+            }
+            return false;
+        case SCLN:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_COLN);
+                } else {
+                    tap_code16(JP_SCLN);
+                }
+            }
+            return false;
+        case BSLS:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_PIPE);
+                } else {
+                    tap_code16(JP_BSLS);
+                }
+            }
+            return false;
+        case GRV:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_TILD);
+                } else {
+                    tap_code16(JP_GRV);
+                }
+            }
+            return false;
+        case MINS:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_UNDS);
+                } else {
+                    tap_code16(JP_MINS);
+                }
+            }
+            return false;
+        case EQL:
+            if (record->event.pressed) {
+                pressed_time = record->event.time;
+            } else {
+                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
+                    tap_code16(JP_PLUS);
+                } else {
+                    tap_code16(JP_EQL);
+                }
             }
             return false;
         default:
