@@ -140,7 +140,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |1.RHT |1.RHT |      |      |      |      |2.NAGI|2.NAGI|      |      |
+ * |      |      |1.RHT |1.RHT |      |      |      |      |      |      |      |      |
+ * |      |      |      |3.NAGI|      |      |      |      |3.NAGI|      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |   '  |0.ENT |      |      |      |      |0.ENT |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -150,29 +151,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 enum combos {
     C_ENTER,
     C_RIGHT,
-    // C_NAGINATA,
+    C_NAGINATA,
 };
 
 const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
-// const uint16_t PROGMEM naginata_combo[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
-  // [C_NAGINATA] = COMBO_ACTION(naginata_combo),
+  [C_NAGINATA] = COMBO_ACTION(naginata_combo),
 };
 
-// void process_combo_event(uint16_t combo_index, bool pressed) {
-//     switch(combo_index) {
-//         case C_NAGINATA:
-//             if (pressed) {
-//                 if (!naginata_state()) {
-//                     naginata_on();
-//                 }
-//             }
-//         break;
-//     }
-// }
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    switch(combo_index) {
+        case C_NAGINATA:
+            if (pressed) {
+                if (!naginata_state()) {
+                    naginata_on();
+                }
+            }
+        break;
+    }
+}
 
 void matrix_init_user(void) {
     uint16_t ngonkeys[] = {};
@@ -241,9 +242,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM)) {
-                    naginata_on();
-                }
                 raise_pressed = false;
             }
             return false;
