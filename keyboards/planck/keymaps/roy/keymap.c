@@ -162,13 +162,14 @@ const uint16_t PROGMEM xxx_combo[] = {NG_F, NG_J, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
-  [C_XXX] = COMBO(xxx_combo, KC_NO),
+  [C_XXX] = COMBO_ACTION(xxx_combo),
   [C_NAGINATA] = COMBO_ACTION(naginata_combo),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
         case C_NAGINATA:
+        case C_XXX:
             if (pressed) {
                 if (!naginata_state()) {
                     naginata_on();
