@@ -1,10 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "os_detection.h"
 #include "naginata.h"
-#include "keymap_japanese.h"
 NGKEYS naginata_keys;
 
-enum planck_layers {
+enum layer_number {
     _ASTARTE,
     _NAGINATA,
     _LOWER,
@@ -13,7 +12,7 @@ enum planck_layers {
     _ADJUST
 };
 
-enum planck_keycodes {
+enum keycodes {
     ASTARTE = NG_SAFE_RANGE,
     LOWER,
     RAISE,
@@ -28,13 +27,7 @@ enum planck_keycodes {
     GENT,
     V_W,
     V_WQ,
-    V_Q,
-    QUOT,
-    SCLN,
-    BSLS,
-    GRV,
-    MINS,
-    EQL,
+    V_Q
 };
 
 #define SLP  LGUI(KC_L)
@@ -50,21 +43,24 @@ enum planck_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Astarte
-     * ,-----------------------------------------------------------------------------------.
-     * |   Q  |   P  |   U  |   Y  |   ,  |XXXXXX|XXXXXX|   J  |   D  |   H  |   G  |   W  |
+     * ,-----------------------------------             -----------------------------------.
+     * |   Q  |   P  |   U  |   Y  |   ,  |             |   J  |   D  |   H  |   G  |   W  |
+     * |------+------+------+------+------+             +------+------+------+------+------|
+     * |   I  |   O  |   E  |   A  |   .  |             |   K  |   T  |   N  |   S  |   R  |
+     * |------+------+------+------+------+             +------+------+------+------+------|
+     * |   Z  |   X  |   '  |   C  |   ;  |             |   M  |   L  |   F  |   B  |   V  |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |   I  |   O  |   E  |   A  |   .  |XXXXXX|XXXXXX|   K  |   T  |   N  |   S  |   R  |
+     * |             | Ctrl |Lower |Space |Space | ENT  | ENT  | Raise| BCSP |             |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |   Z  |   X  |   '  |   C  |   ;  |XXXXXX|XXXXXX|   M  |   L  |   F  |   B  |   V  |
-     * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * | GUI  | SFT  | Ctrl |Lower |Space |Space | ENT  | ENT  | Raise| BCSP |  ALT | RGT  |
+     * |                           |Lower |Space |Space | XXX  | XXX  | XXX  |             |
      * `-----------------------------------------------------------------------------------'
      */
-    [_ASTARTE] = LAYOUT_planck_grid(
-        KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
-        KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
-        KC_Z,    KC_X,    QUOT,    KC_C,  SCLN,    KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-        KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, RGT
+    [_ASTARTE] = LAYOUT(
+        XXXXXXX, KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM,                         KC_J,   KC_D,  KC_H,    KC_G,    KC_W, XXXXXXX,
+        XXXXXXX, KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,                          KC_K,   KC_T,  KC_N,    KC_S,    KC_R, XXXXXXX,
+        XXXXXXX, KC_Z,    KC_X,    KC_QUOT, KC_C,  KC_SCLN,                         KC_M,   KC_L,  KC_F,    KC_B,    KC_V, XXXXXXX,
+                 KC_LGUI, CONTROL, LOWER, KC_SPC,  KC_MS_BTN1, KC_MS_BTN2, KC_ENT, RAISE, KC_BSPC, KC_LALT,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
     /* Lower
@@ -78,11 +74,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      |      |      |      |G ENT |      | DEL  |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_LOWER] = LAYOUT_planck_grid(
-        _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
-        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,    KC_7,    KC_8,    KC_9,     KC_0,
-        _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,    V_SV,    N_LEFT,  N_RGHT,   _______,
-        _______, _______, _______, _______, _______,  _______, GENT,    GENT,    _______, KC_DEL,  _______,  _______
+    [_LOWER] = LAYOUT(
+        XXXXXXX, _______, PSTE,    UNDO,    COPY,    _______,                    KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,  XXXXXXX,
+        XXXXXXX, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                       KC_6,    KC_7,    KC_8,    KC_9,     KC_0,    XXXXXXX,
+        XXXXXXX, _______, _______, V_Q,     V_W,     V_WQ,                       V_CJ,    V_SV,    N_LEFT,  N_RGHT,   _______, XXXXXXX,
+                 _______, _______, _______, _______,  _______, _______, GENT,    _______, KC_DEL,  _______,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
     /* Raise
@@ -96,18 +93,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      | TAB  |      |      |      |      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_RAISE] = LAYOUT_planck_grid(
-        JP_EXLM, JP_AT,   JP_HASH, JP_DLR,  JP_PERC,  _______, _______, JP_CIRC, JP_AMPR, JP_ASTR, KC_RALT, MC,
-        BSLS,    GRV,     EQL,     JP_SLSH, MINS,     _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, _______, JP_UNDS, JP_LPRN, JP_LBRC,  _______, _______, JP_RBRC, JP_RPRN, RTLF,    TPBM,    _______,
-        _______, _______, _______, _______, KC_TAB,   KC_TAB,  _______, _______, _______, _______, _______, _______
+    [_RAISE] = LAYOUT(
+        XXXXXXX, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_ASTR, KC_RALT, MC,      XXXXXXX,
+        XXXXXXX, KC_BSLS, KC_GRV,  KC_EQL,  KC_SLSH, KC_MINUS,                   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, XXXXXXX,
+        XXXXXXX, _______, _______, KC_UNDS, KC_LPRN, KC_LBRC,                    KC_RBRC, KC_RPRN, RTLF,    TPBM,    _______, XXXXXXX,
+                 _______, _______, _______, KC_TAB,   _______, _______, _______, _______, _______, _______,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
-    [_RIGHT] = LAYOUT_planck_grid(
-        _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_WH_D, KC_WH_U, _______, _______,
-        _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN2, KC_BTN1, _______, _______, _______
+    [_RIGHT] = LAYOUT(
+        XXXXXXX, _______, _______, _______, _______, _______,                   _______, MC,      _______, _______, _______, XXXXXXX,
+        XXXXXXX, _______, _______, _______, _______, _______,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, XXXXXXX,
+        XXXXXXX, _______, _______, _______, _______, _______,                   _______, KC_WH_D, KC_WH_U, _______, _______, XXXXXXX,
+                 _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN1, _______, _______,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
     /* Adjust (Lower + Raise)
@@ -121,18 +120,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |       |      |      |      |      |      |      |      |      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_ADJUST] = LAYOUT_planck_grid(
-        _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
-        _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-        KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, KC_WH_D, KC_WH_U, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    [_ADJUST] = LAYOUT(
+       XXXXXXX,  _______, _______, _______, _______, _______,                   _______, MC,      _______, _______, _______, XXXXXXX,
+       XXXXXXX,  _______, _______, KC_BTN2, KC_BTN1, _______,                   KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, XXXXXXX,
+       XXXXXXX,  KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,                       _______, KC_WH_D, KC_WH_U, _______, _______, XXXXXXX,
+                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
-    [_NAGINATA] = LAYOUT_planck_grid(
-        NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,    _______, _______,  NG_Y,     NG_U,    NG_I,    NG_O,    NG_P,
-        NG_A,    NG_S,    NG_D,    NG_F,    NG_G,    _______, _______,  NG_H,     NG_J,    NG_K,    NG_L,    NG_SCLN,
-        NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,    _______, _______,  NG_N,     NG_M,    NG_COMM, NG_DOT,  NG_SLSH,
-        _______, _______, _______, _______, NG_SHFT, NG_SHFT, NG_SHFT2, NG_SHFT2, _______, _______, _______, _______
+    [_NAGINATA] = LAYOUT(
+        XXXXXXX, NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,                       NG_Y,     NG_U,    NG_I,    NG_O,    NG_P,    XXXXXXX,
+        XXXXXXX, NG_A,    NG_S,    NG_D,    NG_F,    NG_G,                       NG_H,     NG_J,    NG_K,    NG_L,    NG_SCLN, XXXXXXX,
+        XXXXXXX, NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,                       NG_N,     NG_M,    NG_COMM, NG_DOT,  NG_SLSH, XXXXXXX,
+                 _______, _______, _______, _______, NG_SHFT, _______, _______,  NG_SHFT2, _______, _______,
+                                                KC_PGUP, KC_MS_BTN3, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
     )
 };
 
@@ -140,8 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |1.RHT |1.RHT |      |      |      |      |      |      |      |      |
- * |      |      |      |3.NAGI|      |      |      |      |3.NAGI|      |      |      |
+ * |      |      |1.RHT |1.RHT |      |      |      |      |2.NAGI|2.NAGI|      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |   '  |0.ENT |      |      |      |      |0.ENT |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -151,29 +151,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 enum combos {
     C_ENTER,
     C_RIGHT,
-    C_NAGINATA,
+    // C_NAGINATA,
 };
 
 const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
-const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
+// const uint16_t PROGMEM naginata_combo[] = {KC_T, KC_N, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
-  [C_NAGINATA] = COMBO_ACTION(naginata_combo),
+  // [C_NAGINATA] = COMBO_ACTION(naginata_combo),
 };
 
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
-        case C_NAGINATA:
-            if (pressed) {
-                if (!naginata_state()) {
-                    naginata_on();
-                }
-            }
-        break;
-    }
-}
+// void process_combo_event(uint16_t combo_index, bool pressed) {
+//     switch(combo_index) {
+//         case C_NAGINATA:
+//             if (pressed) {
+//                 if (!naginata_state()) {
+//                     naginata_on();
+//                 }
+//             }
+//         break;
+//     }
+// }
 
 void matrix_init_user(void) {
     uint16_t ngonkeys[] = {};
@@ -219,10 +219,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case LOWER:
             if (record->event.pressed) {
+                lower_pressed = true;
                 pressed_time = record->event.time;
                 layer_on(_LOWER);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                lower_pressed = true;
             } else {
                 layer_off(_LOWER);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
@@ -235,13 +235,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case RAISE:
             if (record->event.pressed) {
+                raise_pressed = true;
                 pressed_time = record->event.time;
                 layer_on(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                raise_pressed = true;
             } else {
                 layer_off(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                if (raise_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 1.2)) {
+                    naginata_on();
+                }
                 raise_pressed = false;
             }
             return false;
@@ -350,72 +353,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case V_Q:
             if (record->event.pressed) {
                 SEND_STRING(";q\n");
-            }
-            return false;
-        case QUOT:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_DQUO);
-                } else {
-                    tap_code16(JP_QUOT);
-                }
-            }
-            return false;
-        case SCLN:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_COLN);
-                } else {
-                    tap_code16(JP_SCLN);
-                }
-            }
-            return false;
-        case BSLS:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_PIPE);
-                } else {
-                    tap_code16(JP_BSLS);
-                }
-            }
-            return false;
-        case GRV:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_TILD);
-                } else {
-                    tap_code16(JP_GRV);
-                }
-            }
-            return false;
-        case MINS:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_UNDS);
-                } else {
-                    tap_code16(JP_MINS);
-                }
-            }
-            return false;
-        case EQL:
-            if (record->event.pressed) {
-                pressed_time = record->event.time;
-            } else {
-                if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_PLUS);
-                } else {
-                    tap_code16(JP_EQL);
-                }
             }
             return false;
         default:
