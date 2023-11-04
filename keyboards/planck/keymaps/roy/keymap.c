@@ -4,6 +4,7 @@
 #include "keymap_japanese.h"
 NGKEYS naginata_keys;
 
+
 enum planck_layers {
     _ASTARTE,
     _NAGINATA,
@@ -45,7 +46,6 @@ enum planck_keycodes {
 #define MC LGUI(KC_TAB)
 #define N_LEFT LSFT(KC_LEFT)
 #define N_RGHT LSFT(KC_RGHT)
-#define RGT MO(_RIGHT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -57,14 +57,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |   Z  |   X  |   '  |   C  |   ;  |XXXXXX|XXXXXX|   M  |   L  |   F  |   B  |   V  |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * | GUI  | SFT  | Ctrl |Lower |Space |Space | ENT  | ENT  | Raise| BCSP |  ALT | RGT  |
+     * | GUI  | ALT  | Ctrl |Lower |Space |Space | ENT  | ENT  | Raise| BCSP |  SFT | SFT  |
      * `-----------------------------------------------------------------------------------'
      */
     [_ASTARTE] = LAYOUT_planck_grid(
         KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
         KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
         KC_Z,    KC_X,    QUOT,    KC_C,  SCLN,    KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-        KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, RGT
+        KC_LGUI, KC_LALT, CONTROL, LOWER, KC_SPC,  KC_SPC, KC_ENT, KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_RSFT
     ),
 
     /* Lower
@@ -152,14 +152,17 @@ enum combos {
     C_ENTER,
     C_RIGHT,
     C_NAGINATA,
+    C_XXX,
 };
 
 const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
 const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
+const uint16_t PROGMEM xxx_combo[] = {NG_F, NG_J, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
+  [C_XXX] = COMBO(xxx_combo, KC_NO),
   [C_NAGINATA] = COMBO_ACTION(naginata_combo),
 };
 
@@ -181,15 +184,15 @@ void matrix_init_user(void) {
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
 }
 
-// uint32_t last_keypress = 0;
-// void matrix_scan_user(void) {
-//     // *秒間キーが押されていなかったら薙刀式を解除する
-//     if (timer_elapsed32(last_keypress) > 10000) {
-//         if (naginata_state()) {
-//             naginata_off();
-//         }
-//     }
-// }
+uint32_t last_keypress = 0;
+void matrix_scan_user(void) {
+    // *秒間キーが押されていなかったら薙刀式を解除する
+    if (timer_elapsed32(last_keypress) > 15000) {
+        if (naginata_state()) {
+            naginata_off();
+        }
+    }
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
@@ -207,10 +210,10 @@ static bool control_pressed = false;
 static uint16_t pressed_time = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // if (record->event.pressed) {
-    //     // キー操作を監視する
-    //     last_keypress = timer_read32();
-    // }
+    if (record->event.pressed) {
+        // キー操作を監視する
+        last_keypress = timer_read32();
+    }
     switch (keycode) {
         case ASTARTE:
             if (record->event.pressed) {
@@ -253,7 +256,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 unregister_code(KC_LCTL);
                 if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
-                    // 日本語にしてからeisuにする
                     if (naginata_state()) {
                         naginata_off();
                     }

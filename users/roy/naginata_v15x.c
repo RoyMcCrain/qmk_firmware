@@ -529,7 +529,6 @@ void naginata_off(void) {
   layer_off(naginata_layer);
 
   tap_code(KC_LANGUAGE_2); // Mac
-  // TODO: 必要ないので外す
   // tap_code(KC_INTERNATIONAL_5); // Win
 }
 
