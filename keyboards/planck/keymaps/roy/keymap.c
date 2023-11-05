@@ -140,10 +140,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |1.RHT |1.RHT |      |      |      |      |      |      |      |      |
- * |      |      |      |3.NAGI|      |      |      |      |3.NAGI|      |      |      |
+ * |      |      |1.RHT |1.RHT |      |      |      |      |3.NAGI|3.NAGI|      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |   '  |0.ENT |      |      |      |      |0.ENT |      |      |      |
+ * |      |      |      |0.ENT |      |      |      |      |0.ENT |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -157,8 +156,8 @@ enum combos {
 
 const uint16_t PROGMEM enter_combo[] = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM right_combo[] = {KC_A, KC_E, COMBO_END};
-const uint16_t PROGMEM naginata_combo[] = {KC_A, KC_T, COMBO_END};
-const uint16_t PROGMEM xxx_combo[] = {NG_F, NG_J, COMBO_END};
+const uint16_t PROGMEM naginata_combo[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM xxx_combo[] = {NG_J, NG_K, COMBO_END};
 combo_t key_combos[] = {
   [C_ENTER] = COMBO(enter_combo, KC_ENT),
   [C_RIGHT] = COMBO(right_combo, MO(_RIGHT)),
