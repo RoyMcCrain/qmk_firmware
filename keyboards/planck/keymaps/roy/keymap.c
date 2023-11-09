@@ -229,8 +229,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_LOWER);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                // AUTO_SHIFTはTAPPING_TERMの2倍の時間待つ
-                if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
+                if (lower_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM)) {
                     naginata_off();
                 }
                 lower_pressed = false;
@@ -255,7 +254,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 register_code(KC_LCTL);
             } else {
                 unregister_code(KC_LCTL);
-                if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM * 2)) {
+                if (control_pressed && (TIMER_DIFF_16(record->event.time, pressed_time) < TAPPING_TERM )) {
                     if (naginata_state()) {
                         naginata_off();
                     }
@@ -296,45 +295,75 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case UNDO:
             if (record->event.pressed) {
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
-                    tap_code16(G(KC_Z));
+                    register_code16(G(KC_Z));
                 } else {
-                    tap_code16(C(KC_Z));
+                    register_code16(C(KC_Z));
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(G(KC_Z));
+                } else {
+                    unregister_code16(C(KC_Z));
                 }
             }
             return false;
         case CUT:
             if (record->event.pressed) {
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
-                    tap_code16(G(KC_X));
+                    register_code16(G(KC_X));
                 } else {
-                    tap_code16(C(KC_X));
+                    register_code16(C(KC_X));
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(G(KC_X));
+                } else {
+                    unregister_code16(C(KC_X));
                 }
             }
             return false;
         case COPY:
             if (record->event.pressed) {
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
-                    tap_code16(G(KC_C));
+                    register_code16(G(KC_C));
                 } else {
-                    tap_code16(C(KC_C));
+                    register_code16(C(KC_C));
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(G(KC_C));
+                } else {
+                    unregister_code16(C(KC_C));
                 }
             }
             return false;
         case PSTE:
             if (record->event.pressed) {
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
-                    tap_code16(G(KC_V));
+                    register_code16(G(KC_V));
                 } else {
-                    tap_code16(C(KC_V));
+                    register_code16(C(KC_V));
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(G(KC_V));
+                } else {
+                    unregister_code16(C(KC_V));
                 }
             }
             return false;
         case GENT:
             if (record->event.pressed) {
                 if (host_os == OS_MACOS || host_os == OS_IOS) {
-                    tap_code16(G(KC_ENT));
+                    register_code16(G(KC_ENT));
                 } else {
-                    tap_code16(C(KC_ENT));
+                    register_code16(C(KC_ENT));
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(G(KC_ENT));
+                } else {
+                    unregister_code16(C(KC_ENT));
                 }
                 naginata_off();
             }
