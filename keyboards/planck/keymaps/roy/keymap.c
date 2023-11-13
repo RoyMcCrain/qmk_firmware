@@ -36,6 +36,8 @@ enum planck_keycodes {
     GRV,
     MINS,
     EQL,
+    WH_D,
+    WH_U,
 };
 
 #define SLP  LGUI(KC_L)
@@ -106,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_RIGHT] = LAYOUT_planck_grid(
         _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_WH_D, KC_WH_U, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, WH_D,    WH_U,    _______, _______,
         _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN2, KC_BTN1, _______, _______, _______
     ),
 
@@ -124,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_ADJUST] = LAYOUT_planck_grid(
         _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
         _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
-        KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, KC_WH_D, KC_WH_U, _______, _______,
+        KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, WH_D,    WH_U,    _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -447,6 +449,38 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     tap_code16(JP_EQL);
                 }
+            }
+            return false;
+        case WH_D:
+            if (record->event.pressed) {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    register_code16(KC_WH_U);
+                } else {
+                    register_code16(KC_WH_D);
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(KC_WH_U);
+                } else {
+                    unregister_code16(KC_WH_D);
+                }
+                naginata_off();
+            }
+            return false;
+        case WH_U:
+            if (record->event.pressed) {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    register_code16(KC_WH_D);
+                } else {
+                    register_code16(KC_WH_U);
+                }
+            } else {
+                if (host_os == OS_MACOS || host_os == OS_IOS) {
+                    unregister_code16(KC_WH_D);
+                } else {
+                    unregister_code16(KC_WH_U);
+                }
+                naginata_off();
             }
             return false;
         default:
