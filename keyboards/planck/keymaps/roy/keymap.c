@@ -181,6 +181,9 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
             if (pressed) {
                 if (!naginata_state()) {
                     naginata_on();
+                } else {
+                    naginata_off();
+                    naginata_on();
                 }
             }
         break;
