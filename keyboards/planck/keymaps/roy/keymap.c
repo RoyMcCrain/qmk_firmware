@@ -422,9 +422,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 pressed_time = record->event.time;
             } else {
                 if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(JP_PIPE);
+                    tap_code16(S(KC_INT3));
                 } else {
-                    tap_code16(JP_BSLS);
+                    tap_code16(KC_INT1);
                 }
             }
             return false;
