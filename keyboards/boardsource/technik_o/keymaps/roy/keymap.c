@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |   Z  |   X  |   '  |   C  |   ;  |XXXXXX|XXXXXX|   M  |   L  |   F  |   B  |   V  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | GUI  | SFT  | Ctrl |Lower |Space |XXXXXX|XXXXXX| ENT  | Raise| BCSP |  ALT |  SFT |
+ * | GUI  | ALT  | Ctrl |Lower |Space |XXXXXX|XXXXXX| ENT  | Raise| BCSP |  SHT |  MC  |
  * `-----------------------------------------------------------------------------------'
  */
 
@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
         KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
         KC_Z,    KC_X,    QUOT,    KC_C,  SCLN,    KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
-        KC_LGUI, KC_LSFT, CONTROL, LOWER, KC_SPC,  KC_NO,  KC_NO,  KC_ENT, RAISE, KC_BSPC, KC_LALT, KC_RSFT
+        KC_LGUI, KC_LALT, CONTROL, LOWER, KC_SPC,  KC_NO,  KC_NO,  KC_ENT, RAISE, KC_BSPC, KC_RSFT, MC
     ),
 
 /* Lower
@@ -106,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_RIGHT] = LAYOUT_ortho_4x12(
-        _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, KC_TAB,  KC_RALT, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, WH_D,    WH_U,    _______, _______,
         _______, _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______
@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
     [_ADJUST] = LAYOUT_ortho_4x12(
-        _______, _______, _______, _______, _______, _______, _______, _______, MC,      _______, _______, _______,
+        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
         _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
         KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, WH_D,    WH_U,    _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
@@ -147,8 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |0.ENT |      |      |      |      |0.ENT |      |      |      |
  * |      |      |      |      |      |      |      |      |2.SENT|2.SENT|      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
+
  * `-----------------------------------------------------------------------------------'
  */
 enum combos {
