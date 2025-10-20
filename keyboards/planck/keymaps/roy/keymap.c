@@ -210,10 +210,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-static uint16_t host_os;
+static os_variant_t host_os = OS_MACOS;
 void keyboard_post_init_user(void) {
     wait_ms(400);
-    host_os = detected_host_os();
+    os_variant_t detected = detected_host_os();
+    if (detected == OS_UNSURE) {
+        host_os = OS_MACOS;
+    }
+    if (detected == OS_WINDOWS || detected == OS_LINUX) {
+        host_os = detected;
+    }
+    if (detected == OS_IOS) {
+        host_os = OS_IOS;
+    }
 }
 
 static bool lower_pressed = false;

@@ -269,6 +269,8 @@ include $(CHIBIOS)/os/rt/rt.mk
 # Other files (optional).
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 
+OSLIBINC ?= $(CHIBIOS)/os/oslib/include
+
 PLATFORM_SRC = \
         $(STARTUPSRC) \
         $(KERNSRC) \

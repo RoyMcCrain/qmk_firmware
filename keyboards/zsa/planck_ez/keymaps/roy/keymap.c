@@ -62,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * | GUI  | ALT  | Ctrl |Lower |Space |XXXXXX|XXXXXX| ENT  | Raise| BCSP |  SFT | MC   |
      * `-----------------------------------------------------------------------------------'
      */
-    [_ASTARTE] = LAYOUT_ortho_4x12(
+    [_ASTARTE] = LAYOUT_planck_grid(
         KC_Q,    KC_P,    KC_U,    KC_Y,  KC_COMM, KC_NO,  KC_NO,  KC_J,   KC_D,  KC_H,    KC_G,    KC_W,
         KC_I,    KC_O,    KC_E,    KC_A,  KC_DOT,  KC_NO,  KC_NO,  KC_K,   KC_T,  KC_N,    KC_S,    KC_R,
         KC_Z,    KC_X,    QUOT,    KC_C,  SCLN,    KC_NO,  KC_NO,  KC_M,   KC_L,  KC_F,    KC_B,    KC_V,
@@ -80,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      |      |      |      |G ENT |      | DEL  |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_LOWER] = LAYOUT_ortho_4x12(
+    [_LOWER] = LAYOUT_planck_grid(
         _______, PSTE,    UNDO,    COPY,    _______,  _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
         KC_1,    KC_2,    KC_3,    KC_4,    KC_5,     _______, _______, KC_6,    KC_7,    KC_8,    KC_9,     KC_0,
         _______, _______, V_Q,     V_W,     V_WQ,     _______, _______, V_CJ,    V_SV,    N_LEFT,  N_RGHT,   _______,
@@ -98,14 +98,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      | TAB  |      |      |      |      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_RAISE] = LAYOUT_ortho_4x12(
+    [_RAISE] = LAYOUT_planck_grid(
         JP_EXLM, JP_AT,   JP_HASH, JP_DLR,  JP_PERC,  _______, _______, JP_CIRC, JP_AMPR, JP_ASTR, KC_RALT, MC,
         BSLS,    GRV,     EQL,     JP_SLSH, MINS,     _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
         _______, _______, JP_UNDS, JP_LPRN, JP_LBRC,  _______, _______, JP_RBRC, JP_RPRN, RTLF,    TPBM,    _______,
         _______, _______, _______, _______, KC_TAB,   _______, _______, _______, _______, _______, _______, _______
     ),
 
-    [_RIGHT] = LAYOUT_ortho_4x12(
+    [_RIGHT] = LAYOUT_planck_grid(
         _______, _______, _______, _______, _______, _______, _______, _______, KC_TAB,  KC_RALT, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, WH_D,    WH_U,    _______, _______,
@@ -123,14 +123,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |       |      |      |      |      |      |      |      |      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
-    [_ADJUST] = LAYOUT_ortho_4x12(
+    [_ADJUST] = LAYOUT_planck_grid(
         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
         _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
         KC_F11,  KC_F12,  KC_F13,  KC_F14,  SLP,     _______, _______, _______, WH_D,    WH_U,    _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 
-    [_NAGINATA] = LAYOUT_ortho_4x12(
+    [_NAGINATA] = LAYOUT_planck_grid(
         NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,    _______, _______,  NG_Y,     NG_U,    NG_I,    NG_O,    NG_P,
         NG_A,    NG_S,    NG_D,    NG_F,    NG_G,    _______, _______,  NG_H,     NG_J,    NG_K,    NG_L,    NG_SCLN,
         NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,    _______, _______,  NG_N,     NG_M,    NG_COMM, NG_DOT,  NG_SLSH,
@@ -195,16 +195,6 @@ void matrix_init_user(void) {
     uint16_t ngoffkeys[] = {};
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
 }
-
-// uint32_t last_keypress = 0;
-// void matrix_scan_user(void) {
-//     // *秒間キーが押されていなかったら薙刀式を解除する
-//     if (timer_elapsed32(last_keypress) > 15000) {
-//         if (naginata_state()) {
-//             naginata_off();
-//         }
-//     }
-// }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);

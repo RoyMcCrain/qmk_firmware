@@ -121,3 +121,5 @@ via*.json
 /lib
 /keyboards/**/keymaps/via/*
 /keyboards/**/keymaps/vial/*
+
+/logs
