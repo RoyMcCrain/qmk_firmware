@@ -431,12 +431,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 pressed_time = record->event.time;
             } else {
                 if (TIMER_DIFF_16(record->event.time,pressed_time) > AUTO_SHIFT_TIMEOUT) {
-                    tap_code16(S(KC_INT3));
+                    tap_code16(JP_PIPE);
                 } else {
                     if (host_os == OS_MACOS || host_os == OS_IOS) {
-                        tap_code16(JP_YEN);
+                        tap_code16(A(JP_YEN));
                     } else {
-                        tap_code16(KC_INT1);
+                        tap_code16(JP_BSLS);
                     }
                 }
             }
